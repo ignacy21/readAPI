@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista Pracowników</title>
+</head>
+<body>
+
+<h1>Lista Pracowników</h1>
+
+<ul id="employeeList"></ul>
+
+<script>
+  // Adres API
+  const apiUrl = 'http://localhost:8190/w-21/employees';
+
+  // Wywołanie funkcji fetch do wykonania żądania GET
+  fetch(apiUrl)
+    .then(response => {
+      // Sprawdzenie, czy odpowiedź jest prawidłowa (status 200 OK)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Parsowanie odpowiedzi jako JSON
+      return response.json();
+    })
+    .then(data => {
+      // Pobranie listy pracowników
+      const employees = data.employees;
+
+      // Pobranie elementu listy z HTML
+      const employeeList = document.getElementById('employeeList');
+
+      // Iteracja przez listę pracowników i dodanie ich do listy HTML
+      employees.forEach(employee => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${employee.name} ${employee.surname} - ${employee.salary} zł`;
+        employeeList.appendChild(listItem);
+      });
+    })
+    .catch(error => {
+      // Obsługa błędów
+      console.error('Błąd podczas pobierania danych z API:', error);
+    });
+</script>
+
+</body>
+</html>
